@@ -10,7 +10,7 @@ const ActivationPage = () => {
     useEffect(() => {
         const activateUser = async () => {
             try {
-                const response = await axios.post(`http://localhost:8080/api/activation/${userId}/${token}`);
+                const response = await axios.post(`https://urlshort-backend-r5lw.onrender.com/api/activation/${userId}/${token}`);
                 // Handle successful activation
                 setTimeout(() => {
                     setIsLoading(false)
