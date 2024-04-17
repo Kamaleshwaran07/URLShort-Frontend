@@ -1,28 +1,28 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 
-const Urldetails = ({ userId, baseURL }) => {
+const Urldetails = ({ userId, baseURL, urldetails }) => {
   const [responseMsg, setResponseMsg] = useState("");
   const [errorMsg, setErrorMsg] = useState("");
   const [urlCount, setUrlCount] = useState("");
   const [url, setUrl] = useState([]);
-  const [data, setData] = useState([]);
+  // const [data, setData] = useState([]);
   // console.log(userId);
   useEffect(() => {
     fetchData();
-  }, [url]);
+  }, [urldetails]);
   const fetchData = async () => {
     const response = await axios.post(`${baseURL}geturlcount/${userId}`);
-    const res = await axios.post(`${baseURL}getcreatedurls/${userId}`);
+    // const res = await axios.post(`${baseURL}getcreatedurls/${userId}`);
     try {
+      // setUrl(res.data.urls)
       // console.log(response);
-      setData(response.data);
+      // setData(response.data);
       // console.log(response.data);
       setUrlCount(response.data.urlLength);
-
-      console.log(setUrlCount);
-      setUrl(res.data.urls);
-      console.log(setUrl);
+      // console.log(setUrlCount);
+      // setUrl(urldetails);
+      // console.log(setUrl);
       setResponseMsg(response.data.message);
     } catch (error) {
       setErrorMsg(error.response.data.message);
@@ -45,7 +45,7 @@ const Urldetails = ({ userId, baseURL }) => {
           <th className="text-2 text-xl border-3 border-[3px] uppercase">Long URL</th>
           <th className="ms-12 text-2 text-xl border-3 border-[3px] uppercase">Short URL</th>
         </tr>
-        {url.map((item, index) => {
+        {urldetails.map((item, index) => {
           return (
             <tr className="text-4 bg-5 border-3 border-[3px]" key={index}>
               {/* <td>1</td> */}
@@ -56,7 +56,9 @@ const Urldetails = ({ userId, baseURL }) => {
         })}
       </table>
       {/* {errorMsg} */}
-      {responseMsg}
+      {responseMsg && (
+        <div className="text-1">{responseMsg}</div>
+      )}
     </div>
   );
 };

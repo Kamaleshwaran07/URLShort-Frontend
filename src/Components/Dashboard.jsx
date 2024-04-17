@@ -10,37 +10,43 @@ const Dashboard = ({ userData, baseURL }) => {
   const [responseMsg, setResponseMsg] = useState("");
   const [shortUrl, setShortUrl] = useState("");
   const [errorMsg, setErrorMsg] = useState("");
-  // const [data, setData] = useState([])
-  
-  // const fetchData = async () => {
-  //   await axios.post(`${baseURL}geturlcount/${userId}`)
-  //     .then((response) => setData(response.data))
-  //     .catch((error) => setErrorMsg(error.response.data.message))
-  // }
-  // fetchData()
+  const [urldetails, setUrlDetails] = useState([])
+  const fetchData = async () => {
+    try {
+      const response = await axios.post(`${baseURL}getcreatedurls/${userId}`);
+      setUrlDetails(response.data.urls);
+    } catch (error) {
+      console.error("Error fetching URL details:", error);
+    }
+  }
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const payload =  {longurl} ;
+    const payload = { longurl };
     console.log(payload);
     try {
-    const response = await axios.post(`${baseURL}createshorturl/${userId}`, payload);
+      const response = await axios.post(`${baseURL}createshorturl/${userId}`, payload);
       setResponseMsg(response.data.message);
-      setShortUrl(response.data.shorturl);
-      setLongurl('')
-    } catch (err) {
-      setErrorMsg(err.response.data.message);
-    }
-  };
+        setShortUrl(response.data.shorturl);
+        setLongurl('')
+        fetchData();
+      } catch (err) {
+        setErrorMsg(err.response.data.message);
+      }
+    };
+    useEffect(() => {
+      fetchData(); // Fetch initial URL details when component mounts
+    }, [userId, baseURL]); // Fetch again if userId or baseURL changes
   
-
-  return user ? (
-    <div className="relative">
-      <h3 className="text-4 text-xl text-end  me-5 mt-2">
-        User: <span className="text-1">{userData.name}</span>
-      </h3>
-      <hr className="shadow-xl" />
-      {/* <div className=""> */}
-        <form className="ml-6 my-4 flex flex-col w-[30em] border-[2px] border-4 p-2"  onSubmit={handleSubmit}>
+    
+    
+    return user ? (
+      <div className="relative">
+        <h3 className="text-4 text-xl text-end  me-5 mt-2">
+          User: <span className="text-1">{userData.name}</span>
+        </h3>
+        <hr className="shadow-xl" />
+        {/* <div className=""> */}
+        <form className="ml-6 my-4 flex flex-col w-[30em] border-[2px] border-4 p-2" onSubmit={handleSubmit}>
           <label className="text-4" name="longurl">
             <h4 className="text-4 text-xl font-semibold uppercase">
               Create your short URL here
@@ -61,42 +67,42 @@ const Dashboard = ({ userData, baseURL }) => {
             Create Short URL
           </button>
         </form>
-      {/* </div> */}
-      <div className="absolute ms-6 mb-6 w-[30em] h-[8em] p-2 right-[10em] top-[4em] border-2 border-[2px]">
-        <div className="text-3 uppercase text-lg text-center">Your Short URL will appear here</div>
-        <h4 className="text-4">{responseMsg}</h4>
-        {shortUrl ?
-      <a className="text-4">{baseURL}{shortUrl}</a>
-          :
-          <><div className="text-red-500 text-xl uppercase text-center">Create short url</div></>
-        }
+        {/* </div> */}
+        <div className="absolute ms-6 mb-6 w-[30em] h-[8em] p-2 right-[10em] top-[4em] border-2 border-[2px]">
+          <div className="text-3 uppercase text-lg text-center">Your Short URL will appear here</div>
+          <h4 className="text-4">{responseMsg}</h4>
+          {shortUrl ?
+            <a className="text-4">{baseURL}{shortUrl}</a>
+            :
+            <><div className="text-red-500 text-xl uppercase text-center">Create short url</div></>
+          }
 
-      </div>
+        </div>
 
-      <Urldetails userId={userId} baseURL = {baseURL} />
+        <Urldetails userId={userId} baseURL={baseURL} urldetails={urldetails}/>
       
     
-    </div>
-  ) : (
-    <>
-      <div className="text-red-400 uppercase flex items-center justify-center h-[600px]">
-        <img
-          src="https://media.discordapp.net/attachments/1018124413176135700/1228545611192729652/wired-lineal-1140-error.gif?ex=662c6f42&is=6619fa42&hm=6189a496554b97d93eea88574f7c70df7864fbbe34bdb12793a7c10acfbdeedc&=&width=480&height=480"
-          width={50}
-          className="mb-2 me-2"
-          alt="error"
-        />{" "}
-        UserData not found.{" "}
+      </div>
+    ) : (
+      <>
+        <div className="text-red-400 uppercase flex items-center justify-center h-[600px]">
+          <img
+            src="https://media.discordapp.net/attachments/1018124413176135700/1228545611192729652/wired-lineal-1140-error.gif?ex=662c6f42&is=6619fa42&hm=6189a496554b97d93eea88574f7c70df7864fbbe34bdb12793a7c10acfbdeedc&=&width=480&height=480"
+            width={50}
+            className="mb-2 me-2"
+            alt="error"
+          />{" "}
+          UserData not found.{" "}
         
           <a
-          className="text-mindaro ms-4 underline underline-offset-4"
-          href="/login"
-        >
-          Login again to continue
-        </a>
-      </div>
-    </>
-  );
-};
+            className="text-mindaro ms-4 underline underline-offset-4"
+            href="/login"
+          >
+            Login again to continue
+          </a>
+        </div>
+      </>
+    );
+  };
 
 export default Dashboard;
