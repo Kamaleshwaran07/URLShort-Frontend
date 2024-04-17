@@ -47,7 +47,7 @@ const ActivationPage = () => {
               </>
             )}
             {!isLoading && responseMsg && (
-              <div className="text-purpureus text-xl">{responseMsg}</div>
+              <div className="text-2 text-xl">{responseMsg}</div>
             )}
             {!isLoading && error && (
               <div className="w-full flex flex-col justify-center items-center">
