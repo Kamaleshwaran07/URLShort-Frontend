@@ -11,7 +11,7 @@ import ActivationPage from './Components/Activation';
 
 const App = () => {
 
-  const baseURL = 'http://localhost:8080/api/';
+  const baseURL = 'https://urlshort-backend-r5lw.onrender.com/api/';
   const [userData, setUserData] = useState('')
 const [isAuthenticated, setIsAuthenticated] = useState(false)
   // const baseURL = 'https://passwordreset-woco.onrender.com';
